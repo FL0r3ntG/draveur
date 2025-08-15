@@ -1,34 +1,54 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Micro Blog</title>
+  <title>Draveur - Microblog</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>My Micro Blog</h1>
-    <p>Short thoughts, daily updates, random musings.</p>
+    <h1>Draveur</h1>
+    <p>Petits billets, pensées du jour, réflexions au fil de l’eau.</p>
   </header>
 
-  <main>
-    <article>
-      <h2>First Post</h2>
-      <p class="date">August 14, 2025</p>
-      <p>Hello world! This is my very first micro-blog post. Excited to share my thoughts here!</p>
-    </article>
-
-    <article>
-      <h2>Second Post</h2>
-      <p class="date">August 15, 2025</p>
-      <p>Today I learned how easy it is to host a static site with GitHub Pages.</p>
-    </article>
+  <main id="billets-list">
+    <!-- Billets will load here -->
   </main>
 
   <footer>
-    <p>© 2025 My Micro Blog</p>
+    <p>© 2025 Draveur</p>
   </footer>
+
+  <script>
+    const container = document.getElementById('billets-list');
+
+    // Charger la liste des billets depuis JSON
+    fetch('billets/list.json')
+      .then(res => res.json())
+      .then(billets => {
+        billets.forEach(file => {
+          fetch('billets/' + file)
+            .then(res => res.text())
+            .then(html => {
+              const tempDiv = document.createElement('div');
+              tempDiv.innerHTML = html;
+
+              const title = tempDiv.querySelector('.title').textContent;
+              const date = tempDiv.querySelector('.date').textContent;
+              const intro = tempDiv.querySelector('.intro').textContent;
+
+              const article = document.createElement('article');
+              article.innerHTML = `
+                <h2><a href="billets/${file}">${title}</a></h2>
+                <p class="date">${date}</p>
+                <p class="intro">${intro}</p>
+              `;
+              container.appendChild(article);
+            })
+            .catch(err => console.error('Erreur lors du chargement du billet:', file, err));
+        });
+      });
+  </script>
 </body>
 </html>
