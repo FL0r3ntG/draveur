@@ -13,7 +13,7 @@
   </header>
 
   <main id="billets-list">
-    <!-- Billets will load here -->
+    <!-- Les billets seront chargés ici -->
   </main>
 
   <footer>
@@ -23,7 +23,6 @@
   <script>
     const container = document.getElementById('billets-list');
 
-    // Charger la liste des billets depuis JSON
     fetch('billets/list.json')
       .then(res => res.json())
       .then(billets => {
@@ -40,7 +39,7 @@
 
               const article = document.createElement('article');
               article.innerHTML = `
-                <h2><a href="billets/${file}">${title}</a></h2>
+                <h2><a href="billet-template.html?file=${file}">${title}</a></h2>
                 <p class="date">${date}</p>
                 <p class="intro">${intro}</p>
               `;

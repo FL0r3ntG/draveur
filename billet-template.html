@@ -24,10 +24,8 @@
   </footer>
 
   <script>
-    // Get filename from URL parameter
     const params = new URLSearchParams(window.location.search);
     const file = params.get('file');
-
     const articleContainer = document.getElementById('billet-article');
 
     if(file){
@@ -36,7 +34,6 @@
         .then(html => {
           articleContainer.innerHTML = html;
 
-          // Optional: update <title> with billet title
           const titleElem = articleContainer.querySelector('.title');
           if(titleElem) document.title = titleElem.textContent + ' - Draveur';
         })
