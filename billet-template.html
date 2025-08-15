@@ -3,26 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><!-- TITRE DU BILLET --> - Draveur</title>
-  <link rel="stylesheet" href="../style.css">
+  <title>Draveur - Microblog</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
     <h1>Draveur</h1>
-    <nav><a href="../index.html">Accueil</a></nav>
+    <p>Petits billets, pensées du jour, réflexions au fil de l’eau.</p>
+    <nav><a href="index.html">Accueil</a></nav>
   </header>
 
-  <article>
-    <h1 class="title"><!-- TITRE DU BILLET --></h1>
-    <p class="date"><!-- DATE DU BILLET --></p>
-    <p class="intro"><!-- INTRODUCTION DU BILLET --></p>
-    <div class="content">
-      <!-- CONTENU COMPLET DU BILLET -->
-    </div>
-  </article>
+  <main>
+    <article id="billet-article">
+      <!-- Billet content will load here -->
+    </article>
+  </main>
 
   <footer>
     <p>© 2025 Draveur</p>
   </footer>
+
+  <script>
+    // Get filename from URL parameter
+    const params = new URLSearchParams(window.location.search);
+    const file = params.get('file');
+
+    const articleContainer = document.getElementById('billet-article');
+
+    if(file){
+      fetch('billets/' + file)
+        .then(res => res.text())
+        .then(html => {
+          articleContainer.innerHTML = html;
+
+          // Optional: update <title> with billet title
+          const titleElem = articleContainer.querySelector('.title');
+          if(titleElem) document.title = titleElem.textContent + ' - Draveur';
+        })
+        .catch(err => {
+          articleContainer.innerHTML = '<p>Erreur: impossible de charger ce billet.</p>';
+          console.error('Erreur lors du chargement du billet:', err);
+        });
+    } else {
+      articleContainer.innerHTML = '<p>Aucun billet sélectionné.</p>';
+    }
+  </script>
 </body>
 </html>
